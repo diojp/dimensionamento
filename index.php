@@ -20,7 +20,9 @@
             </p>
         </div>
         <div class="row">
+
             <div class="col">
+                <h3 class="text-center">Dados do Empreendimento</h3>
                 <form class="row g-3" action="<?php $_SERVER['PHP_SELF']; ?>" method="GET">
                     <div class="col-md-6">
                         <div class="input-group input-group-sm flex-nowrap">
@@ -31,13 +33,13 @@
                     <div class="col-md-6">
                         <div class="input-group input-group input-group-sm flex-nowrap">
                             <span class="input-group-text" id="addon-wrapping">Municipio</span>
-                            <input type="text" class="form-control" value="<?php echo isset($_GET['municipio']) ? htmlspecialchars($_GET['municipio']) : ''; ?>" name="municipio"  aria-describedby="addon-wrapping">
+                            <input type="text" class="form-control" value="<?php echo isset($_GET['municipio']) ? htmlspecialchars($_GET['municipio']) : ''; ?>" name="municipio" aria-describedby="addon-wrapping">
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="input-group input-group input-group-sm flex-nowrap">
                             <span class="input-group-text" id="addon-wrapping">Proprietário</span>
-                            <input type="text" class="form-control" value="<?php echo isset($_GET['municipio']) ? htmlspecialchars($_GET['proprietario']) : ''; ?>"  name="proprietario"  aria-describedby="addon-wrapping">
+                            <input type="text" class="form-control" value="<?php echo isset($_GET['municipio']) ? htmlspecialchars($_GET['proprietario']) : ''; ?>" name="proprietario" aria-describedby="addon-wrapping">
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -49,13 +51,13 @@
                     <div class="col-md-6">
                         <div class="input-group input-group input-group-sm flex-nowrap">
                             <span class="input-group-text" id="addon-wrapping">Área da B. Hidrográfica (km²) - A</span>
-                            <input type="text" class="form-control" value="<?php echo isset($_GET['municipio']) ? htmlspecialchars($_GET['area']) : ''; ?>" name="area"  aria-describedby="addon-wrapping">
+                            <input type="text" class="form-control" value="<?php echo isset($_GET['municipio']) ? htmlspecialchars($_GET['area']) : ''; ?>" name="area" aria-describedby="addon-wrapping">
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="input-group input-group input-group-sm flex-nowrap">
                             <span class="input-group-text" id="addon-wrapping">Comprimento do riacho (km) - L</span>
-                            <input type="text" class="form-control" value="<?php echo isset($_GET['municipio']) ? htmlspecialchars($_GET['comprimento']) : ''; ?>" name="comprimento"  aria-describedby="addon-wrapping">
+                            <input type="text" class="form-control" value="<?php echo isset($_GET['municipio']) ? htmlspecialchars($_GET['comprimento']) : ''; ?>" name="comprimento" aria-describedby="addon-wrapping">
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -67,7 +69,7 @@
                     <div class="col-md-6">
                         <div class="input-group input-group input-group-sm flex-nowrap">
                             <span class="input-group-text" id="addon-wrapping">Fetch (km) - F</span>
-                            <input type="text" class="form-control" value="<?php echo isset($_GET['municipio']) ? htmlspecialchars($_GET['fetch']) : ''; ?>" name="fetch"  aria-describedby="addon-wrapping">
+                            <input type="text" class="form-control" value="<?php echo isset($_GET['municipio']) ? htmlspecialchars($_GET['fetch']) : ''; ?>" name="fetch" aria-describedby="addon-wrapping">
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -127,101 +129,108 @@
                 </form>
             </div>
             <div class="col">
+                
                 <?php
-                    if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["submit"])) {
-                        $acude = $_GET["acude"];
-                        $municipio = $_GET["municipio"];
-                        $proprietario = $_GET["proprietario"];
-                        $local = $_GET["local"];
-                        $area = str_replace(',', '.', $_GET["area"]);
-                        $comprimento = str_replace(',', '.', $_GET["comprimento"]);
-                        $precipitacao = str_replace(',', '.', $_GET["precipitacao"]);
-                        $fetch = str_replace(',', '.', $_GET["fetch"]);
-                        $sangria = str_replace(',', '.', $_GET["sangria"]);
-                        $altura = str_replace(',', '.', $_GET["altura"]);
+                if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["submit"])) {
+                    echo "<h3 class='text-center'>Cálculo do Dimensionamento</h3>";
 
-                        $constk = str_replace(',', '.',  $_GET["constk"]);
-                        $constc = str_replace(',', '.',  $_GET["constc"]);
-                        $constu = str_replace(',', '.', $_GET["constu"]);
+                    $acude = $_GET["acude"];
+                    $municipio = $_GET["municipio"];
+                    $proprietario = $_GET["proprietario"];
+                    $local = $_GET["local"];
+                    $area = str_replace(',', '.', $_GET["area"]);
+                    $comprimento = str_replace(',', '.', $_GET["comprimento"]);
+                    $precipitacao = str_replace(',', '.', $_GET["precipitacao"]);
+                    $fetch = str_replace(',', '.', $_GET["fetch"]);
+                    $sangria = str_replace(',', '.', $_GET["sangria"]);
+                    $altura = str_replace(',', '.', $_GET["altura"]);
 
-                        function rendimentoPluvialBacia($precipitacao)
-                        {
-                            if ($precipitacao <= 1000) {
-                                return round(($precipitacao ** 2 - (400 * $precipitacao) + 230000) / 55000, 4, PHP_ROUND_HALF_UP);
-                            } else {
-                                $h = $precipitacao / 1000;
-                                return round((((28.53 * $h) - (112.95 * $h ** 2) + (351.91 * $h ** 3) - (118.74 * $h ** 4)) / (10 * $h)) / 100, 4, PHP_ROUND_HALF_UP);
-                            }
+                    $constk = str_replace(',', '.',  $_GET["constk"]);
+                    $constc = str_replace(',', '.',  $_GET["constc"]);
+                    $constu = str_replace(',', '.', $_GET["constu"]);
+
+                    function rendimentoPluvialBacia($precipitacao)
+                    {
+                        if ($precipitacao <= 1000) {
+                            return round(($precipitacao ** 2 - (400 * $precipitacao) + 230000) / 55000, 4, PHP_ROUND_HALF_UP);
+                        } else {
+                            $h = $precipitacao / 1000;
+                            return round((((28.53 * $h) - (112.95 * $h ** 2) + (351.91 * $h ** 3) - (118.74 * $h ** 4)) / (10 * $h)) / 100, 4, PHP_ROUND_HALF_UP);
                         }
+                    }
 
-                        function volumeAfluente($rendimento, $precipitacao, $constu, $area)
-                        {
-                            if ($precipitacao <= 1000) {
-                                return round(((float)$rendimento / 100) * ($precipitacao / 1000) * $constu * ($area * 1000000), 2, PHP_ROUND_HALF_UP);
-                            } else {
-                                return round(((float)$rendimento) * $constu * $area * 1000000, 2, PHP_ROUND_HALF_UP);
-                            }
+                    function volumeAfluente($rendimento, $precipitacao, $constu, $area)
+                    {
+                        if ($precipitacao <= 1000) {
+                            return round(((float)$rendimento / 100) * ($precipitacao / 1000) * $constu * ($area * 1000000), 2, PHP_ROUND_HALF_UP);
+                        } else {
+                            return round(((float)$rendimento) * $constu * $area * 1000000, 2, PHP_ROUND_HALF_UP);
                         }
+                    }
 
-                        function volumeC($volumeAfluente)
-                        {
-                            return $volumeAfluente * 2;
-                        }
+                    function volumeC($volumeAfluente)
+                    {
+                        return $volumeAfluente * 2;
+                    }
 
-                        function descargaMaximaSecular($area, $comprimento, $constk, $constc)
-                        {
-                            return round((1150 * $area) / (sqrt($comprimento * $constc) * (120 + ($constk * $comprimento * $constc))), 2, PHP_ROUND_HALF_UP);
-                        }
+                    function descargaMaximaSecular($area, $comprimento, $constk, $constc)
+                    {
+                        return round((1150 * $area) / (sqrt($comprimento * $constc) * (120 + ($constk * $comprimento * $constc))), 2, PHP_ROUND_HALF_UP);
+                    }
 
-                        function folgaBarragem($fetch){
-                            return (0.36*sqrt($fetch)+0.76-(0.27*pow($fetch,1/4)));
-                        }
+                    function folgaBarragem($fetch)
+                    {
+                        return (0.36 * sqrt($fetch) + 0.76 - (0.27 * pow($fetch, 1 / 4)));
+                    }
 
-                        function calculoRevanche($folga, $sangria){
-                            return $folga + $sangria;
-                        }
+                    function calculoRevanche($folga, $sangria)
+                    {
+                        return $folga + $sangria;
+                    }
 
-                        function calculoLarguraCoroamento($altura){
-                            return round(1.1*sqrt($altura) + 1, 2, PHP_ROUND_HALF_UP);
-                        }
+                    function calculoLarguraCoroamento($altura)
+                    {
+                        return round(1.1 * sqrt($altura) + 1, 2, PHP_ROUND_HALF_UP);
+                    }
 
-                        function calculoLarguraSangradouro($descarga, $sangria){
-                            return round($descarga/(1.77*$sangria*sqrt($sangria)),2, PHP_ROUND_HALF_UP);
-                        }
-
-
-
-                        $rendimento = rendimentoPluvialBacia($precipitacao);
-                        $rendimentoV = str_replace('.', ',', $rendimento);
-
-                        $vA = volumeAfluente($rendimento, $precipitacao, $constu, $area);
-                        $vAV = str_replace('.', ',', $vA);
-
-                        $vC = volumeC($vA);
-                        $vCV = str_replace('.', ',', $vC);
-
-                        $descarga = descargaMaximaSecular($area, $comprimento, $constk, $constc);
-                        $descargaV = str_replace('.', ',', $descarga);
-
-                        $folga = folgaBarragem($fetch);
-                        $folgaV = str_replace('.', ',', $folga);
-
-                        $revanche = calculoRevanche($folga, $sangria);
-                        $revancheV = str_replace('.', ',', $revanche);
-
-                        $coroamento = calculoLarguraCoroamento($altura);
-                        $coroamentoV = str_replace('.', ',', $coroamento);
-
-                        $sangradouro = calculoLarguraSangradouro($descarga, $sangria);
-                        $sangradouroV = str_replace('.', ',', $sangradouro);
+                    function calculoLarguraSangradouro($descarga, $sangria)
+                    {
+                        return round($descarga / (1.77 * $sangria * sqrt($sangria)), 2, PHP_ROUND_HALF_UP);
+                    }
 
 
 
-                        // echo "area: $area <br/> comprimento: $comprimento <br/> precipitacao: $precipitacao <br/> fetch: $fetch <br/>
-                        //     sangria: $sangria <br/> altura: $altura <br/> const k: $constk <br/> const c: $constc <br/> const u: $constu
-                        //     <br/> Rendimento: $rendimento <br/> volume Afluente: $vA <br/> Volume C: $vC <br/> descarga: $descarga";
+                    $rendimento = rendimentoPluvialBacia($precipitacao);
+                    $rendimentoV = str_replace('.', ',', $rendimento);
 
-                        echo "
+                    $vA = volumeAfluente($rendimento, $precipitacao, $constu, $area);
+                    $vAV = str_replace('.', ',', $vA);
+
+                    $vC = volumeC($vA);
+                    $vCV = str_replace('.', ',', $vC);
+
+                    $descarga = descargaMaximaSecular($area, $comprimento, $constk, $constc);
+                    $descargaV = str_replace('.', ',', $descarga);
+
+                    $folga = folgaBarragem($fetch);
+                    $folgaV = str_replace('.', ',', $folga);
+
+                    $revanche = calculoRevanche($folga, $sangria);
+                    $revancheV = str_replace('.', ',', $revanche);
+
+                    $coroamento = calculoLarguraCoroamento($altura);
+                    $coroamentoV = str_replace('.', ',', $coroamento);
+
+                    $sangradouro = calculoLarguraSangradouro($descarga, $sangria);
+                    $sangradouroV = str_replace('.', ',', $sangradouro);
+
+
+
+                    // echo "area: $area <br/> comprimento: $comprimento <br/> precipitacao: $precipitacao <br/> fetch: $fetch <br/>
+                    //     sangria: $sangria <br/> altura: $altura <br/> const k: $constk <br/> const c: $constc <br/> const u: $constu
+                    //     <br/> Rendimento: $rendimento <br/> volume Afluente: $vA <br/> Volume C: $vC <br/> descarga: $descarga";
+
+                    echo "
                         <div class='table-responsive'>
                             <table class='table align-left'>
                                 <thead>
@@ -286,7 +295,7 @@
                             </table>
                         </div>
                         ";
-                    };
+                };
                 ?>
 
             </div>
