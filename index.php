@@ -6,10 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dimensionamento Açude</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/style.css" />
 </head>
 
 <body>
     <div class="container text-center">
+        <!-- <img src="img/agua.svg" alt=""> -->
+
         <div class="topo">
             <p>
             <h1>Dimensionamento de Açudes</h1>
@@ -19,7 +22,6 @@
             </p>
         </div>
         <div class="row">
-
             <div class="col">
                 <h3 class="text-center">Dados do Empreendimento</h3>
                 <form class="row g-3" action="<?php $_SERVER['PHP_SELF']; ?>" method="POST">
@@ -79,7 +81,7 @@
                     </div>
                     <div class="col-md-6">
                         <div class="input-group input-group input-group-sm flex-nowrap">
-                            <span class="input-group-text" id="addon-wrapping">Altura da Barragem </span>
+                            <span class="input-group-text" id="addon-wrapping">Altura da Barragem (m)</span>
                             <input type="text" class="form-control" value="<?php echo isset($_POST['altura']) ? htmlspecialchars($_POST['altura']) : ''; ?>" name="altura" aria-describedby="addon-wrapping">
                         </div>
                     </div>
@@ -124,171 +126,168 @@
                     </div>
 
                     <div class="col-12">
-
-                    </div>
-                    <div class="col-12">
                         <button type="submit" class="btn btn-primary" name="submit">Calcular</button>
+                    </div>
+                    <div class="col-12 text-center">
+                        <img class="rounded" src="img/figuras1.svg" alt="">
                     </div>
                 </form>
             </div>
+
             <div class="col">
+                <div class="col-12">
+                    <?php
+                    $exibirImagem = false;
 
-                <?php
-                if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
-                    $erros = [];
+                    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
+                        $erros = [];
 
-                    // Função para verificar se um valor é numérico
-                    function isNumeric($value)
-                    {
-                        return is_numeric(str_replace(',', '.', $value));
-                    }
-
-                    // Verifica se os campos foram preenchidos e são numéricos
-                    $campos = [
-                        'area' => 'Área da B. Hidrográfica (km²) - A',
-                        'comprimento' => 'Comprimento do riacho (km) - L',
-                        'precipitacao' => 'Precipitação (Média Anual - mm) - H',
-                        'fetch' => 'Fetch (km) - F',
-                        'sangria' => 'Lamina de Sangria (m) - Hsang',
-                        'altura' => 'Altura da Barragem'
-                    ];
-
-                    foreach ($campos as $campo => $label) {
-                        if (empty($_POST[$campo])) {
-                            $erros[] = "O campo $label é obrigatório.";
-                        } elseif (!isNumeric($_POST[$campo])) {
-                            $erros[] = "O campo $label deve conter apenas números.";
-                        }
-                    }
-
-                    // Se houver erros, exibe-os; caso contrário, continue com o processamento
-                    if (!empty($erros)) {
-                        foreach ($erros as $erro) {
-                            echo "<p style='color: red;'>$erro</p>";
-                        }
-                    } else {
-                        echo "<h3 class='text-center'>Cálculo do Dimensionamento</h3>";
-
-                        $acude = $_POST["acude"];
-                        $municipio = $_POST["municipio"];
-                        $proprietario = $_POST["proprietario"];
-                        $local = $_POST["local"];
-                        $area = str_replace(',', '.', $_POST["area"]);
-                        $comprimento = str_replace(',', '.', $_POST["comprimento"]);
-                        $precipitacao = str_replace(',', '.', $_POST["precipitacao"]);
-                        $fetch = str_replace(',', '.', $_POST["fetch"]);
-                        $sangria = str_replace(',', '.', $_POST["sangria"]);
-                        $altura = str_replace(',', '.', $_POST["altura"]);
-
-                        $constk = str_replace(',', '.',  $_POST["constk"]);
-                        $constc = str_replace(',', '.',  $_POST["constc"]);
-                        $constu = str_replace(',', '.', $_POST["constu"]);
-
-                        echo "Const K: $constk, Const C: $constc, CONST U: $constu";
-
-                        function rendimentoPluvialBacia($precipitacao)
+                        // Função para verificar se um valor é numérico
+                        function isNumeric($value)
                         {
-                            $p = (float)$precipitacao;
-                            if ($p <= 1000) {
-                                return round(($p ** 2 - (400 * $p) + 230000) / 55000, 4, PHP_ROUND_HALF_UP);
-                            } else {
-                                $h = $p / 1000;
-                                return round((((28.53 * $h) - (112.95 * $h ** 2) + (351.91 * $h ** 3) - (118.74 * $h ** 4)) / (10 * $h)) / 100, 4, PHP_ROUND_HALF_UP);
+                            return is_numeric(str_replace(',', '.', $value));
+                        }
+
+                        // Verifica se os campos foram preenchidos e são numéricos
+                        $campos = [
+                            'area' => 'Área da B. Hidrográfica (km²) - A',
+                            'comprimento' => 'Comprimento do riacho (km) - L',
+                            'precipitacao' => 'Precipitação (Média Anual - mm) - H',
+                            'fetch' => 'Fetch (km) - F',
+                            'sangria' => 'Lamina de Sangria (m) - Hsang',
+                            'altura' => 'Altura da Barragem'
+                        ];
+
+                        foreach ($campos as $campo => $label) {
+                            if (empty($_POST[$campo])) {
+                                $erros[] = "O campo $label é obrigatório.";
+                            } elseif (!isNumeric($_POST[$campo])) {
+                                $erros[] = "O campo $label deve conter apenas números.";
                             }
                         }
 
-                        function volumeAfluente($rendimento, $precipitacao, $constu, $area)
-                        {
-                            $r = (float)$rendimento;
-                            $p = (float)$precipitacao;
-                            $cu = (float)$constu;
-                            $a = (float)$area;
-                            if ($p <= 1000) {
-                                return round(((float)$r / 100) * ($p / 1000) * $cu * ($a * 1000000), 2, PHP_ROUND_HALF_UP);
-                            } else {
-                                return round(((float)$r) * $cu * $a * 1000000, 2, PHP_ROUND_HALF_UP);
+                        // Se houver erros, exibe-os; caso contrário, continue com o processamento
+                        if (!empty($erros)) {
+                            foreach ($erros as $erro) {
+                                echo "<p style='color: red;'>$erro</p>";
                             }
-                        }
+                        } else {
+                            $exibirImagem = true;
+                            $acude = $_POST["acude"];
+                            $municipio = $_POST["municipio"];
+                            $proprietario = $_POST["proprietario"];
+                            $local = $_POST["local"];
+                            $area = str_replace(',', '.', $_POST["area"]);
+                            $comprimento = str_replace(',', '.', $_POST["comprimento"]);
+                            $precipitacao = str_replace(',', '.', $_POST["precipitacao"]);
+                            $fetch = str_replace(',', '.', $_POST["fetch"]);
+                            $sangria = str_replace(',', '.', $_POST["sangria"]);
+                            $altura = str_replace(',', '.', $_POST["altura"]);
 
-                        function volumeC($volumeAfluente)
-                        {
-                            $vA = (float)$volumeAfluente;
-                            return $vA * 2;
-                        }
-
-                        function descargaMaximaSecular($area, $comprimento, $constk, $constc)
-                        {
-                            $a = (float)$area;
-                            $c = (float)$comprimento;
-                            $ck = (float)$constk;
-                            $cc = (float)$constc;
-                            echo "$a - $c - $ck - $cc";
-                            return round((1150 * $a) / (sqrt($c * $cc) * (120 + ($ck * $c * $cc))), 2, PHP_ROUND_HALF_UP);
-                        }
-
-                        function folgaBarragem($fetch)
-                        {
-                            $f = (float)$fetch;
-                            return (0.36 * sqrt($f) + 0.76 - (0.27 * pow($f, 1 / 4)));
-                        }
-
-                        function calculoRevanche($folga, $sangria)
-                        {
-                            $f = (float)$folga;
-                            $s = (float)$sangria;
-                            return $f + $s;
-                        }
-
-                        function calculoLarguraCoroamento($altura)
-                        {
-                            $a = (float)$altura;
-                            return round(1.1 * sqrt($a) + 1, 2, PHP_ROUND_HALF_UP);
-                        }
-
-                        function calculoLarguraSangradouro($descarga, $sangria)
-                        {
-                            $d = (float)$descarga;
-                            $s = (float)$sangria;
-                            return round($d / (1.77 * $s * sqrt($s)), 2, PHP_ROUND_HALF_UP);
-                        }
+                            $constk = str_replace(',', '.',  $_POST["constk"]);
+                            $constc = str_replace(',', '.',  $_POST["constc"]);
+                            $constu = str_replace(',', '.', $_POST["constu"]);
 
 
 
-                        $rendimento = rendimentoPluvialBacia($precipitacao);
-                        $rendimentoV = str_replace('.', ',', $rendimento);
 
-                        $vA = volumeAfluente($rendimento, $precipitacao, $constu, $area);
-                        $vAV = str_replace('.', ',', $vA);
+                            function rendimentoPluvialBacia($precipitacao)
+                            {
+                                $p = (float)$precipitacao;
+                                if ($p <= 1000) {
+                                    return round(($p ** 2 - (400 * $p) + 230000) / 55000, 4, PHP_ROUND_HALF_UP);
+                                } else {
+                                    $h = $p / 1000;
+                                    return round((((28.53 * $h) - (112.95 * $h ** 2) + (351.91 * $h ** 3) - (118.74 * $h ** 4)) / (10 * $h)) / 100, 4, PHP_ROUND_HALF_UP);
+                                }
+                            }
 
-                        $vC = volumeC($vA);
-                        $vCV = str_replace('.', ',', $vC);
+                            function volumeAfluente($rendimento, $precipitacao, $constu, $area)
+                            {
+                                $r = (float)$rendimento;
+                                $p = (float)$precipitacao;
+                                $cu = (float)$constu;
+                                $a = (float)$area;
+                                if ($p <= 1000) {
+                                    return round(((float)$r / 100) * ($p / 1000) * $cu * ($a * 1000000), 2, PHP_ROUND_HALF_UP);
+                                } else {
+                                    return round(((float)$r) * $cu * $a * 1000000, 2, PHP_ROUND_HALF_UP);
+                                }
+                            }
 
-                        $descarga = descargaMaximaSecular($area, $comprimento, $constk, $constc);
-                        $descargaV = str_replace('.', ',', $descarga);
+                            function volumeC($volumeAfluente)
+                            {
+                                $vA = (float)$volumeAfluente;
+                                return $vA * 2;
+                            }
 
-                        $folga = folgaBarragem($fetch);
-                        $folgaV = str_replace('.', ',', $folga);
+                            function descargaMaximaSecular($area, $comprimento, $constk, $constc)
+                            {
+                                $a = (float)$area;
+                                $c = (float)$comprimento;
+                                $ck = (float)$constk;
+                                $cc = (float)$constc;
 
-                        $revanche = calculoRevanche($folga, $sangria);
-                        $revancheV = str_replace('.', ',', $revanche);
+                                return round((1150 * $a) / (sqrt($c * $cc) * (120 + ($ck * $c * $cc))), 2, PHP_ROUND_HALF_UP);
+                            }
 
-                        $coroamento = calculoLarguraCoroamento($altura);
-                        $coroamentoV = str_replace('.', ',', $coroamento);
+                            function folgaBarragem($fetch)
+                            {
+                                $f = (float)$fetch;
+                                return (0.36 * sqrt($f) + 0.76 - (0.27 * pow($f, 1 / 4)));
+                            }
 
-                        $sangradouro = calculoLarguraSangradouro($descarga, $sangria);
-                        $sangradouroV = str_replace('.', ',', $sangradouro);
+                            function calculoRevanche($folga, $sangria)
+                            {
+                                $f = (float)$folga;
+                                $s = (float)$sangria;
+                                return $f + $s;
+                            }
+
+                            function calculoLarguraCoroamento($altura)
+                            {
+                                $a = (float)$altura;
+                                return round(1.1 * sqrt($a) + 1, 2, PHP_ROUND_HALF_UP);
+                            }
+
+                            function calculoLarguraSangradouro($descarga, $sangria)
+                            {
+                                $d = (float)$descarga;
+                                $s = (float)$sangria;
+                                return round($d / (1.77 * $s * sqrt($s)), 2, PHP_ROUND_HALF_UP);
+                            }
 
 
 
-                        // echo "area: $area <br/> comprimento: $comprimento <br/> precipitacao: $precipitacao <br/> fetch: $fetch <br/>
-                        //     sangria: $sangria <br/> altura: $altura <br/> const k: $constk <br/> const c: $constc <br/> const u: $constu
-                        //     <br/> Rendimento: $rendimento <br/> volume Afluente: $vA <br/> Volume C: $vC <br/> descarga: $descarga";
+                            $rendimento = rendimentoPluvialBacia($precipitacao);
+                            $rendimentoV = str_replace('.', ',', $rendimento);
 
-                        echo "
-                        <div class='table-responsive'>
-                            <table class='table align-left'>
+                            $vA = volumeAfluente($rendimento, $precipitacao, $constu, $area);
+                            $vAV = str_replace('.', ',', $vA);
+
+                            $vC = volumeC($vA);
+                            $vCV = str_replace('.', ',', $vC);
+
+                            $descarga = descargaMaximaSecular($area, $comprimento, $constk, $constc);
+                            $descargaV = str_replace('.', ',', $descarga);
+
+                            $folga = folgaBarragem($fetch);
+                            $folgaV = str_replace('.', ',', $folga);
+
+                            $revanche = calculoRevanche($folga, $sangria);
+                            $revancheV = str_replace('.', ',', $revanche);
+
+                            $coroamento = calculoLarguraCoroamento($altura);
+                            $coroamentoV = str_replace('.', ',', $coroamento);
+
+                            $sangradouro = calculoLarguraSangradouro($descarga, $sangria);
+                            $sangradouroV = str_replace('.', ',', $sangradouro);
+
+                            echo "
+                        <div class='table-responsive tabela'>
+                            <table class='table align-left table-sm '>
                                 <thead>
-                                    
+                                    <tr> <h3 class='text-center'>Cálculo do Dimensionamento</h3></tr>
                                 </thead>
                                 <tbody>
                                     <tr>
@@ -349,13 +348,24 @@
                             </table>
                         </div>
                         ";
-                    }
-                };
-                ?>
+                        }
+                    };
+                    ?>
+                </div>
 
+                <div class="col-12">
+                    <?php if ($exibirImagem) : ?>
+                        <img src="img/figura2.svg" height="180rem" alt="">
+                    <?php endif; ?>
+
+                </div>
             </div>
         </div>
     </div>
+    <script>
+        const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
+        const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl));
+    </script>
     <script>
         const selectTipoBacia = document.getElementById('inputState');
 
@@ -367,11 +377,6 @@
 
         const constuValue = document.getElementById('u').value;
         document.getElementById('constu').value = constuValue;
-
-        var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
-        var popoverList = popoverTriggerList.map(function(popoverTriggerEl) {
-            return new bootstrap.Popover(popoverTriggerEl)
-        })
 
         selectTipoBacia.addEventListener('change', function() {
             let value = selectTipoBacia.options[selectTipoBacia.selectedIndex].value;
