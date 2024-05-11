@@ -101,7 +101,9 @@
 
                     </div>
                     <div class="col-md-1">
-                        <button type="button" class="btn btn-lg btn-danger btn-sm" data-bs-toggle="popover" title="Tipos de Barragens" data-bs-placement="right" data-bs-content="SADFSDFSDF">?</button>
+
+                        <button type="button" class="btn btn-danger" id="popoverButton" data-bs-toggle="popover" title="Tipos de Barragens" data-bs-content="Detalhes sobre os tipos de barragens.">?</button>
+
                     </div>
                     <div class="col-md-2">
                         <div class="input-group input-group input-group-sm flex-nowrap">
@@ -198,7 +200,7 @@
                                     return round(($p ** 2 - (400 * $p) + 230000) / 55000, 4, PHP_ROUND_HALF_UP);
                                 } else {
                                     $h = $p / 1000;
-                                    return round((((28.53 * $h) - (112.95 * $h ** 2) + (351.91 * $h ** 3) - (118.74 * $h ** 4)) / (10 * $h)) / 100, 4, PHP_ROUND_HALF_UP);
+                                    return round((((28.53 * $h) - (112.95 * $h * 2) + (351.91 * $h * 3) - (118.74 * $h ** 4)) / (10 * $h)) / 100, 4, PHP_ROUND_HALF_UP);
                                 }
                             }
 
@@ -362,10 +364,10 @@
             </div>
         </div>
     </div>
-    <script>
+    <!-- <script>
         const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
         const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl));
-    </script>
+    </script> -->
     <script>
         const selectTipoBacia = document.getElementById('inputState');
 
@@ -453,6 +455,13 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var popoverLista = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+            var popover = popoverLista.map(function(popoverTriggerEl) {
+                return new bootstrap.Popover(popoverTriggerEl)
+            });
+        });
+    </script>
 </body>
-
 </html>
