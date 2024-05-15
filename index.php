@@ -10,6 +10,10 @@
 </head>
 
 <body>
+    <?php
+    $globalExibirImagem = false;
+    echo $globalExibirImagem;
+    ?>
     <div class="container text-center">
         <!-- <img src="img/agua.svg" alt=""> -->
 
@@ -133,16 +137,16 @@
                     <div class="col-12">
                         <button type="submit" class="btn btn-primary" name="submit">Calcular</button>
                     </div>
-                    <div class="col-12 text-center">
-                        <img class="rounded" src="img/figuras1.svg" alt="">
-                    </div>
                 </form>
             </div>
 
             <div class="col">
                 <div class="col-12">
                     <?php
-                    $exibirImagem = false;
+                    require_once "autoload.php";
+                    require_once "funcoes.php";
+
+                    use Classes\Dados;
 
                     if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
                         $erros = [];
@@ -177,115 +181,47 @@
                                 echo "<p style='color: red;'>$erro</p>";
                             }
                         } else {
-                            $exibirImagem = true;
-                            $acude = $_POST["acude"];
-                            $municipio = $_POST["municipio"];
-                            $proprietario = $_POST["proprietario"];
-                            $local = $_POST["local"];
-                            $area = str_replace(',', '.', $_POST["area"]);
-                            $comprimento = str_replace(',', '.', $_POST["comprimento"]);
-                            $precipitacao = str_replace(',', '.', $_POST["precipitacao"]);
-                            $fetch = str_replace(',', '.', $_POST["fetch"]);
-                            $sangria = str_replace(',', '.', $_POST["sangria"]);
-                            $altura = str_replace(',', '.', $_POST["altura"]);
 
-                            $constk = str_replace(',', '.',  $_POST["constk"]);
-                            $constc = str_replace(',', '.',  $_POST["constc"]);
-                            $constu = str_replace(',', '.', $_POST["constu"]);
+                            $GLOBALS['globalExibirImagem'] = true;
+                            $dados = new Dados();
 
+                            $dados->setAcude($_POST["acude"]);
+                            $dados->setMunicipio($_POST["municipio"]);
+                            $dados->setProprietario($_POST["proprietario"]);
+                            $dados->setLocal($_POST["local"]);
+                            $dados->setArea(str_replace(',', '.', $_POST["area"]));
+                            $dados->setComprimento(str_replace(',', '.', $_POST["comprimento"]));
+                            $dados->setPrecipitacao(str_replace(',', '.', $_POST["precipitacao"]));
+                            $dados->setFetch(str_replace(',', '.', $_POST["fetch"]));
+                            $dados->setSangria(str_replace(',', '.', $_POST["sangria"]));
+                            $dados->setAltura(str_replace(',', '.', $_POST["altura"]));
 
+                            $dados->setConstk(str_replace(',', '.',  $_POST["constk"]));
+                            $dados->setConstc(str_replace(',', '.',  $_POST["constc"]));
+                            $dados->setConstu(str_replace(',', '.', $_POST["constu"]));
 
-
-                            function rendimentoPluvialBacia($precipitacao)
-                            {
-                                $p = (float)$precipitacao;
-                                if ($p <= 1000) {
-                                    return round(($p ** 2 - (400 * $p) + 230000) / 55000, 4, PHP_ROUND_HALF_UP);
-                                } else {
-                                    $h = $p / 1000;
-                                    return round((((28.53 * $h) - (112.95 * $h * 2) + (351.91 * $h * 3) - (118.74 * $h ** 4)) / (10 * $h)) / 100, 4, PHP_ROUND_HALF_UP);
-                                }
-                            }
-
-                            function volumeAfluente($rendimento, $precipitacao, $constu, $area)
-                            {
-                                $r = (float)$rendimento;
-                                $p = (float)$precipitacao;
-                                $cu = (float)$constu;
-                                $a = (float)$area;
-                                if ($p <= 1000) {
-                                    return round(((float)$r / 100) * ($p / 1000) * $cu * ($a * 1000000), 2, PHP_ROUND_HALF_UP);
-                                } else {
-                                    return round(((float)$r) * $cu * $a * 1000000, 2, PHP_ROUND_HALF_UP);
-                                }
-                            }
-
-                            function volumeC($volumeAfluente)
-                            {
-                                $vA = (float)$volumeAfluente;
-                                return $vA * 2;
-                            }
-
-                            function descargaMaximaSecular($area, $comprimento, $constk, $constc)
-                            {
-                                $a = (float)$area;
-                                $c = (float)$comprimento;
-                                $ck = (float)$constk;
-                                $cc = (float)$constc;
-
-                                return round((1150 * $a) / (sqrt($c * $cc) * (120 + ($ck * $c * $cc))), 2, PHP_ROUND_HALF_UP);
-                            }
-
-                            function folgaBarragem($fetch)
-                            {
-                                $f = (float)$fetch;
-                                return (0.36 * sqrt($f) + 0.76 - (0.27 * pow($f, 1 / 4)));
-                            }
-
-                            function calculoRevanche($folga, $sangria)
-                            {
-                                $f = (float)$folga;
-                                $s = (float)$sangria;
-                                return $f + $s;
-                            }
-
-                            function calculoLarguraCoroamento($altura)
-                            {
-                                $a = (float)$altura;
-                                return round(1.1 * sqrt($a) + 1, 2, PHP_ROUND_HALF_UP);
-                            }
-
-                            function calculoLarguraSangradouro($descarga, $sangria)
-                            {
-                                $d = (float)$descarga;
-                                $s = (float)$sangria;
-                                return round($d / (1.77 * $s * sqrt($s)), 2, PHP_ROUND_HALF_UP);
-                            }
-
-
-
-                            $rendimento = rendimentoPluvialBacia($precipitacao);
+                            $rendimento = rendimentoPluvialBacia($dados->getPrecipitacao());
                             $rendimentoV = str_replace('.', ',', $rendimento);
 
-                            $vA = volumeAfluente($rendimento, $precipitacao, $constu, $area);
+                            $vA = volumeAfluente($rendimento, $dados->getPrecipitacao(), $dados->getConstu(), $dados->getArea());
                             $vAV = str_replace('.', ',', $vA);
 
                             $vC = volumeC($vA);
                             $vCV = str_replace('.', ',', $vC);
 
-                            $descarga = descargaMaximaSecular($area, $comprimento, $constk, $constc);
+                            $descarga = descargaMaximaSecular($dados->getArea(), $dados->getComprimento(), $dados->getConstk(), $dados->getConstc());
                             $descargaV = str_replace('.', ',', $descarga);
 
-                            $folga = folgaBarragem($fetch);
+                            $folga = folgaBarragem($dados->getFetch());
                             $folgaV = str_replace('.', ',', $folga);
 
-                            $revanche = calculoRevanche($folga, $sangria);
+                            $revanche = calculoRevanche($folga, $dados->getSangria());
                             $revancheV = str_replace('.', ',', $revanche);
 
-                            $coroamento = calculoLarguraCoroamento($altura);
+                            $coroamento = calculoLarguraCoroamento($dados->getAltura());
                             $coroamentoV = str_replace('.', ',', $coroamento);
 
-                            $sangradouro = calculoLarguraSangradouro($descarga, $sangria);
+                            $sangradouro = calculoLarguraSangradouro($descarga, $dados->getSangria());
                             $sangradouroV = str_replace('.', ',', $sangradouro);
 
                             echo "
@@ -297,22 +233,22 @@
                                 <tbody>
                                     <tr>
                                         <th scope='col'>Açude</th>
-                                        <td >$acude</td>
+                                        <td >{$dados->getAcude()}</td>
                                         
                                     </tr>
                                     <tr>
                                         <th scope='row'>Município</th>
-                                        <td>$municipio</td>
+                                        <td>{$dados->getMunicipio()}</td>
                                     </tr>
                                 
                                     <tr>
                                         <th scope='row'>Propietário</th>
-                                        <td>$proprietario</td>                                                                
+                                        <td>{$dados->getProprietario()}</td>                                                                
                                     </tr>
 
                                     <tr>
                                         <th scope='row'>Local</th>
-                                        <td colspan='2'>$local</td>
+                                        <td colspan='2'>{$dados->getLocal()}</td>
                                     </tr>
                                     
                                     <tr>
@@ -358,11 +294,22 @@
                     ?>
                 </div>
 
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="col-12 text-center">
+                    <?php if ($globalExibirImagem) : ?>
+                        <img class="rounded" src="img/figuras1.svg" alt="">
+                    <?php endif; ?>
+                </div>
+            </div>
+            <div class="col">
                 <div class="col-12">
-                    <?php if ($exibirImagem) : ?>
+                    <?php if ($globalExibirImagem) : ?>
                         <img src="img/figura2.svg" height="180rem" alt="">
                     <?php endif; ?>
-
                 </div>
             </div>
         </div>

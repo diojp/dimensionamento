@@ -1,24 +1,5 @@
 <?php
 
-$exibirImagem = true;
-$acude = $_POST["acude"];
-$municipio = $_POST["municipio"];
-$proprietario = $_POST["proprietario"];
-$local = $_POST["local"];
-$area = str_replace(',', '.', $_POST["area"]);
-$comprimento = str_replace(',', '.', $_POST["comprimento"]);
-$precipitacao = str_replace(',', '.', $_POST["precipitacao"]);
-$fetch = str_replace(',', '.', $_POST["fetch"]);
-$sangria = str_replace(',', '.', $_POST["sangria"]);
-$altura = str_replace(',', '.', $_POST["altura"]);
-
-$constk = str_replace(',', '.',  $_POST["constk"]);
-$constc = str_replace(',', '.',  $_POST["constc"]);
-$constu = str_replace(',', '.', $_POST["constu"]);
-
-
-
-
 function rendimentoPluvialBacia($precipitacao)
 {
     $p = (float)$precipitacao;
@@ -84,29 +65,3 @@ function calculoLarguraSangradouro($descarga, $sangria)
     $s = (float)$sangria;
     return round($d / (1.77 * $s * sqrt($s)), 2, PHP_ROUND_HALF_UP);
 }
-
-
-
-$rendimento = rendimentoPluvialBacia($precipitacao);
-$rendimentoV = str_replace('.', ',', $rendimento);
-
-$vA = volumeAfluente($rendimento, $precipitacao, $constu, $area);
-$vAV = str_replace('.', ',', $vA);
-
-$vC = volumeC($vA);
-$vCV = str_replace('.', ',', $vC);
-
-$descarga = descargaMaximaSecular($area, $comprimento, $constk, $constc);
-$descargaV = str_replace('.', ',', $descarga);
-
-$folga = folgaBarragem($fetch);
-$folgaV = str_replace('.', ',', $folga);
-
-$revanche = calculoRevanche($folga, $sangria);
-$revancheV = str_replace('.', ',', $revanche);
-
-$coroamento = calculoLarguraCoroamento($altura);
-$coroamentoV = str_replace('.', ',', $coroamento);
-
-$sangradouro = calculoLarguraSangradouro($descarga, $sangria);
-$sangradouroV = str_replace('.', ',', $sangradouro);
