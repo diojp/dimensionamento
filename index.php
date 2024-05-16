@@ -108,9 +108,8 @@
 
                     </div>
                     <div class="col-md-1">
-
-                        <button type="button" class="btn btn-danger" id="popoverButton" data-bs-toggle="popover" title="Tipos de Barragens" data-bs-content="Detalhes sobre os tipos de barragens.">?</button>
-
+                        <button type="button" class="btn btn-danger popbutton" id="popoverButton" data-bs-toggle="popover" data-bs-html="true"
+                         title="Tipos de Bacia" data-bs-content=". ">?</button>
                     </div>
                     <div class="col-md-2">
                         <div class="input-group input-group input-group-sm flex-nowrap">
@@ -135,7 +134,8 @@
                     </div>
 
                     <div class="col-12">
-                        <button type="submit" class="btn btn-primary" name="submit">Calcular</button>
+                        <button type="submit" class="btn btn-primary botao" name="submit">Calcular</button>
+                        <button type="submit" class="btn btn-primary botao" onclick="limpaFormulario()" >Limpar</button>
                     </div>
                 </form>
             </div>
@@ -143,11 +143,10 @@
             <div class="col">
                 <div class="col-12">
                     <?php
-                    require_once "autoload.php";
                     require_once "funcoes.php";
                     require_once "svg.php";
+                    require_once "classes/Dados.php";
 
-                    use Classes\Dados;
 
                     if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
                         $erros = [];
@@ -226,15 +225,15 @@
                             $sangradouroV = str_replace('.', ',', $sangradouro);
 
                             $camposFig1 = [
-                                'sangria' => $dados->getSangria(),
-                                'altura' => $dados->getAltura(),
-                                'revanche' => $revanche,
-                                'folga' => $folga,
-                                'coroamento' => $coroamento
+                                'sangria' => str_replace('.', ',', $dados->getSangria()),
+                                'altura' => str_replace('.', ',', $dados->getAltura()),
+                                'revanche' => $revancheV,
+                                'folga' => $folgaV,
+                                'coroamento' => $coroamentoV
                             ]; 
 
                             $camposFig2 = [
-                                'sangradouro' => $sangradouro                                
+                                'sangradouro' => $sangradouroV                                
                             ]; 
                             
                             atualizaSVG("img/barragem.svg", $camposFig1);

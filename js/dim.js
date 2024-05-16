@@ -75,6 +75,14 @@ selectTipoBacia.addEventListener('change', function () {
             document.getElementById("constk").value = 1.111;
             document.getElementById("constc").value = 1.45;
             document.getElementById("constu").value = 0.6;
+        case "7":
+            document.getElementById("k").value = "1,111";
+            document.getElementById("c").value = "1,45";
+            document.getElementById("u").value = "0,6";
+
+            document.getElementById("constk").value = 1.111;
+            document.getElementById("constc").value = 1.45;
+            document.getElementById("constu").value = 0.6;
             break;
     }
 
@@ -83,67 +91,47 @@ selectTipoBacia.addEventListener('change', function () {
 
 
 document.addEventListener('DOMContentLoaded', function () {
+    let tipo = "<ul>";
+    tipo = "<li>Tipo 1 - Pequena; íngreme; rochoso </li>";
+    tipo += "<li>Tipo 2 - Bem acidentada, sem depressão evaporativa</li>";
+    tipo += "<li>Tipo 3 - Média</li>";
+    tipo += "<li>Tipo 4 - Ligeiramente acidentada</li>";
+    tipo += "<li>Tipo 5 - Ligeiramente acidentada apresentando depressão evaporativa</li>";
+    tipo += "<li>Tipo 6 - Quase plana, terreno argiloso</li>";
+    tipo += "<li>Tipo 7 - Quase plana, terreno variável ou ordinário</li>";
+    tipo += "<li>Tipo 8 - Quase plana, terreno arenoso</li>";
+    tipo += "</ul>";
+
+    console.log(tipo);
+
+    var elemento = document.getElementById('popoverButton');
+    console.log(elemento.setAttribute('data-bs-content', tipo));
     var popoverLista = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
     var popover = popoverLista.map(function (popoverTriggerEl) {
         return new bootstrap.Popover(popoverTriggerEl)
     });
 });
 
-
-
-// document.addEventListener("DOMContentLoaded", function () {
-//     const formulario = document.getElementById("formDimensionamento");
-
-//     formulario.addEventListener("submit", function (event) {
-//         event.preventDefault();
-
-//         const numerosInputs = {
-//             'area': formulario.querySelector('input[name="area"]').value.trim(),
-//             'comprimento': formulario.querySelector('input[name="comprimento"]').value.trim(),
-//             'precipitacao': formulario.querySelector('input[name="precipitacao"]').value.trim(),
-//             'fetch': formulario.querySelector('input[name="fetch"]').value.trim(),
-//             'sangria': formulario.querySelector('input[name="sangria"]').value.trim(),
-//             'altura': formulario.querySelector('input[name="altura"]').value.trim(),
-//         };
-
-//         let validacao = true;
-
-//         for (const [campo, valor] of Object.entries(numerosInputs)) {
-//             const regexNumeros = /^[0-9]+$/;
-
-//             if (!valor) {
-//                 alert(`O campo ${campo} deve ser preenchido.`);
-//                 validacao = false;
-//                 break;
-//             } else if (!regexNumeros.test(valor)) {
-//                 alert(`O campo ${campo} deve conter apenas números.`);
-//                 validacao = false;
-//                 break;
-//             }
-//         }
-
-//         if (validacao) {
-//             formulario.submit();
-//         }
-//     });
-// });
-
 // Example starter JavaScript for disabling form submissions if there are invalid fields
 (() => {
     'use strict'
-  
     // Fetch all the forms we want to apply custom Bootstrap validation styles to
     const forms = document.querySelectorAll('.needs-validation')
-  
+
     // Loop over them and prevent submission
     Array.from(forms).forEach(form => {
-      form.addEventListener('submit', event => {
-        if (!form.checkValidity()) {
-          event.preventDefault()
-          event.stopPropagation()
-        }
-  
-        form.classList.add('was-validated')
-      }, false)
+        form.addEventListener('submit', event => {
+            if (!form.checkValidity()) {
+                event.preventDefault()
+                event.stopPropagation()
+            }
+
+            form.classList.add('was-validated')
+        }, false)
     })
-  })()
+})()
+
+function limparFormulario() {
+    location.reload(); // Atualiza a página    
+}
+

@@ -17,7 +17,7 @@ function atualizaSVG($svg, $campos)
 
         if ($textElement) {
             // Altera o valor do texto
-            $textElement->nodeValue = $valor;
+            $textElement->nodeValue = $valor . " m";
         } else {
             echo "Elemento com id $chave não encontrado.";
         }

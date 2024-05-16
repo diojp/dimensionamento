@@ -1,7 +1,5 @@
 <?php
 
-namespace Classes;
-
 class Dados
 {
         private $acude;

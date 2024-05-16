@@ -43,14 +43,14 @@ function descargaMaximaSecular($area, $comprimento, $constk, $constc)
 function folgaBarragem($fetch)
 {
     $f = (float)$fetch;
-    return (0.36 * sqrt($f) + 0.76 - (0.27 * pow($f, 1 / 4)));
+    return round((0.36 * sqrt($f) + 0.76 - (0.27 * pow($f, 1 / 4))), 2, PHP_ROUND_HALF_UP) ;
 }
 
 function calculoRevanche($folga, $sangria)
 {
     $f = (float)$folga;
     $s = (float)$sangria;
-    return $f + $s;
+    return round($f + $s, 2, PHP_ROUND_HALF_UP) ;
 }
 
 function calculoLarguraCoroamento($altura)
