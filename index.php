@@ -145,6 +145,7 @@
                     <?php
                     require_once "autoload.php";
                     require_once "funcoes.php";
+                    require_once "svg.php";
 
                     use Classes\Dados;
 
@@ -224,6 +225,21 @@
                             $sangradouro = calculoLarguraSangradouro($descarga, $dados->getSangria());
                             $sangradouroV = str_replace('.', ',', $sangradouro);
 
+                            $camposFig1 = [
+                                'sangria' => $dados->getSangria(),
+                                'altura' => $dados->getAltura(),
+                                'revanche' => $revanche,
+                                'folga' => $folga,
+                                'coroamento' => $coroamento
+                            ]; 
+
+                            $camposFig2 = [
+                                'sangradouro' => $sangradouro                                
+                            ]; 
+                            
+                            atualizaSVG("img/barragem.svg", $camposFig1);
+                            atualizaSVG("img/barragemLateral.svg", $camposFig2);
+
                             echo "
                         <div class='table-responsive tabela'>
                             <table class='table align-left table-sm '>
@@ -301,14 +317,14 @@
             <div class="col">
                 <div class="col-12 text-center">
                     <?php if ($globalExibirImagem) : ?>
-                        <img class="rounded" src="img/figuras1.svg" alt="">
+                        <img class="rounded" src="img/barragem.svg" alt="">
                     <?php endif; ?>
                 </div>
             </div>
             <div class="col">
                 <div class="col-12">
                     <?php if ($globalExibirImagem) : ?>
-                        <img src="img/figura2.svg" height="180rem" alt="">
+                        <img src="img/barragemLateral.svg" height="180rem" alt="">
                     <?php endif; ?>
                 </div>
             </div>

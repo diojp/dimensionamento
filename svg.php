@@ -1,33 +1,31 @@
 <?php
 
-// Caminho para o arquivo SVG
-$svgFile = 'img/figuras1.svg';
-$modifiedSvgFile = 'img/figura1m.svg';
+function atualizaSVG($svg, $campos)
+{
+    // Carrega o conteúdo SVG em um objeto DOMDocument
+    $svgFile = $svg;
+    $dom = new DOMDocument();
+    $dom->load($svgFile);
 
-// Carrega o arquivo SVG
-$doc = new DOMDocument();
-$doc->load($svgFile);
+    // Cria um objeto DOMXPath
+    $xpath = new DOMXPath($dom);
 
-echo $doc;
-// Modificar as tags <text>
-$tagCoroamento = $doc->getElementById('coroamento');
-// $tagCoroamento->nodeValue = '5000';
-echo $tagCoroamento->nodeValue;
+    foreach ($campos as $chave => $valor) {
 
+        // Encontra o elemento <text> com id="coroamento" usando XPath
+        $textElement = $xpath->query('//*[@id="'.$chave.'"]')->item(0);
 
-// foreach ($textTags as $textTag) {
-//     echo $textTag->nodeValue;
-//     $textTag->nodeValue = 'Novo Texto';
-    
-// }
+        if ($textElement) {
+            // Altera o valor do texto
+            $textElement->nodeValue = $valor;
+        } else {
+            echo "Elemento com id $chave não encontrado.";
+        }
+    }
+    // Salva o resultado de volta em um arquivo
+    $dom->save($svg);
 
-// // Modificar as tags <circle>
-// $circleTags = $doc->getElementsByTagName('circle');
-// foreach ($circleTags as $circleTag) {
-//     $circleTag->setAttribute('fill', 'blue');
-// }
-
-// Salva as modificações de volta no arquivo SVG
-$doc->save($modifiedSvgFile);
-
-echo "<img class='rounded' src='img/figuras1m.svg' alt=''>";
+    // Ou exibe o SVG modificado diretamente
+    // header('Content-Type: image/svg+xml');
+    // echo $dom->saveXML();
+}
