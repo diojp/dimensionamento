@@ -186,7 +186,7 @@
    <line class="fil10 str2" x1="8812.05" y1="3364.76" x2="16172.5" y2="1637.37"/>
   </g>
   <polygon class="fil4 str3" points="14872,330.58 15788.95,324.35 15788.95,1683.46 14855.69,1893.94 "/>
-  <text x="14103.52" y="1380.19" class="fil11 fnt0" id="sangradouro">24,24 m</text>
+  <text x="14103.52" y="1380.19" class="fil11 fnt0" id="sangradouro">8,13 m</text>
   <text x="231.18" y="7569.75" class="fil11 fnt0">L - Largura do Sangradouro</text>
  </g>
 </svg>
