@@ -103,6 +103,7 @@
                                 <option value="5">Tipo 5</option>
                                 <option value="6">Tipo 6</option>
                                 <option value="7">Tipo 7</option>
+                                <option value="8">Tipo 8</option>
                             </select>
                         </div>
 

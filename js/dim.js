@@ -75,14 +75,14 @@ selectTipoBacia.addEventListener('change', function () {
             document.getElementById("constk").value = 1.111;
             document.getElementById("constc").value = 1.45;
             document.getElementById("constu").value = 0.6;
-        case "7":
-            document.getElementById("k").value = "1,111";
-            document.getElementById("c").value = "1,45";
-            document.getElementById("u").value = "0,6";
+        case "8":
+            document.getElementById("k").value = "2,5";
+            document.getElementById("c").value = "1,6";
+            document.getElementById("u").value = "0,5";
 
-            document.getElementById("constk").value = 1.111;
-            document.getElementById("constc").value = 1.45;
-            document.getElementById("constu").value = 0.6;
+            document.getElementById("constk").value = 2.5;
+            document.getElementById("constc").value = 1.6;
+            document.getElementById("constu").value = 0.5;
             break;
     }
 
