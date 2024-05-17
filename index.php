@@ -58,7 +58,7 @@
                     </div>
                     <div class="col-md-6">
                         <div class="input-group input-group input-group-sm flex-nowrap">
-                            <span class="input-group-text" id="addon-wrapping">Área da B. Hidrográfica (km²) - A</span>
+                            <span class="input-group-text" id="addon-wrapping">Área B. Hidrográfica (km²) - A</span>
                             <input type="text" class="form-control" value="<?php echo isset($_POST['area']) ? htmlspecialchars($_POST['area']) : ''; ?>" name="area" aria-describedby="addon-wrapping">
                         </div>
                     </div>
@@ -70,7 +70,7 @@
                     </div>
                     <div class="col-md-6">
                         <div class="input-group input-group input-group-sm flex-nowrap">
-                            <span class="input-group-text" id="addon-wrapping">Precipitação (Média Anual - mm) - H</span>
+                            <span class="input-group-text" id="addon-wrapping">Precipitação (Med. Anual - mm) - H</span>
                             <input type="text" class="form-control" value="<?php echo isset($_POST['precipitacao']) ? htmlspecialchars($_POST['precipitacao']) : ''; ?>" name="precipitacao" aria-describedby="addon-wrapping">
                         </div>
                     </div>
@@ -82,7 +82,7 @@
                     </div>
                     <div class="col-md-6">
                         <div class="input-group input-group input-group-sm flex-nowrap">
-                            <span class="input-group-text" id="addon-wrapping">Lamina de Sangria (m) - Hsang</span>
+                            <span class="input-group-text" id="addon-wrapping">Lâmina de Sangria (m) - Hsang</span>
                             <input type="text" class="form-control" value="<?php echo isset($_POST['sangria']) ? htmlspecialchars($_POST['sangria']) : ''; ?>" name="sangria" v aria-describedby="addon-wrapping">
                         </div>
                     </div>
